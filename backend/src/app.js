@@ -7,24 +7,28 @@ const xss = require('xss-clean');
 const routes = require('./routes');
 const { limiter } = require('./common/middlewares/rateLimiter.middleware');
 const { ApiError, errorHandler } = require('./common/middlewares/error.middleware');
+const { clientUrl } = require('./config');
 
 const app = express();
 
 app.use(helmet());
-const allowedOrigins = ["http://localhost:5173"];
-if (process.env.CLIENT_URL) {
-  allowedOrigins.push(process.env.CLIENT_URL);
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://vendorsmanagement-ebg.netlify.app"
+];
+if (clientUrl) {
+    allowedOrigins.push(clientUrl);
 }
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS blocked"));
-    }
-  },
-  credentials: true
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS blocked"));
+        }
+    },
+    credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
