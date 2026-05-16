@@ -11,4 +11,4 @@ cp .env.example .env
 npm run dev
 ```
 
-Runs at http://localhost:5173 with API proxy to backend.
+Runs at http://:5173 with API proxy to backend.
