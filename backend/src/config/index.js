@@ -30,7 +30,8 @@ module.exports = {
   mongoUri,
   clientUrl:
     process.env.CLIENT_URL ||
-    process.env.CORS_ORIGIN ,
+    process.env.CORS_ORIGIN
+    || https://vendorsmanagement-ebg.netlify.app,
   jwt: {
     accessSecret: jwtAccessSecret,
     refreshSecret: jwtRefreshSecret,
