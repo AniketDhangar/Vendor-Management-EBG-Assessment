@@ -11,10 +11,10 @@ const { ApiError, errorHandler } = require('./common/middlewares/error.middlewar
 const app = express();
 
 app.use(helmet());
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.CLIENT_URL
-];
+const allowedOrigins = ["http://localhost:5173"];
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
 
 app.use(cors({
   origin: function (origin, callback) {
