@@ -11,7 +11,21 @@ const { ApiError, errorHandler } = require('./common/middlewares/error.middlewar
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: [process.env.CLIENT_URL], credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked"));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
