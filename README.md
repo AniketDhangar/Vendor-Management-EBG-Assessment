@@ -41,4 +41,3 @@ Backend follows **Controller → Service → Repository** under `backend/src/mod
 
 Roles: `admin` (full access), `vendor` (scoped to linked `vendorRef`).
 # Vendor-Management-EBG-Assessment
-# Vendor-Management-EBG-Assessment
