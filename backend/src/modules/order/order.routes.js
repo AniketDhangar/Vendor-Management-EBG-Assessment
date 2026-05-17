@@ -3,7 +3,7 @@ const ctrl = require('./order.controller');
 const { authenticate } = require('../../common/middlewares/auth.middleware');
 const { permit } = require('../../common/middlewares/roles.middleware');
 const { ApiError } = require('../../common/middlewares/error.middleware');
-const { createOrder, updateOrderStatus } = require('./order.validator');
+const { createOrder, updateOrderStatus, createUserOrder } = require('./order.validator');
 
 const validateOrder = (schema) => (req, res, next) => {
   const { error, value } = schema.validate(req.body, {
@@ -17,9 +17,14 @@ const validateOrder = (schema) => (req, res, next) => {
   next();
 };
 
+// User orders
+router.post('/user/checkout', authenticate, permit('user','vendor'), validateOrder(createUserOrder), ctrl.createUserOrder);
+router.get('/user/my-orders', authenticate, permit('user','vendor'), ctrl.getUserOrders);
+
+// Admin & Vendor orders
 router.get('/', authenticate, permit('admin', 'vendor'), ctrl.list);
 router.post('/', authenticate, permit('admin', 'vendor'), validateOrder(createOrder), ctrl.create);
-router.get('/:id', authenticate, permit('admin', 'vendor'), ctrl.get);
+router.get('/:id', authenticate, ctrl.get);
 router.patch('/:id/status', authenticate, permit('admin', 'vendor'), validateOrder(updateOrderStatus), ctrl.updateStatus);
 router.delete('/:id', authenticate, permit('admin'), ctrl.remove);
 

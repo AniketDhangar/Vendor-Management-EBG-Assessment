@@ -18,8 +18,16 @@ const createOrder = Joi.object({
   }).optional()
 });
 
+// User order checkout - can have products from multiple vendors
+const createUserOrder = Joi.object({
+  items: Joi.array().items(orderItem).min(1).required(),
+  shippingAddress: Joi.string().required(),
+  shippingMethod: Joi.string().valid('standard', 'express', 'overnight').optional().default('standard'),
+  notes: Joi.string().max(500).optional()
+});
+
 const updateOrderStatus = Joi.object({
   status: Joi.string().valid('pending', 'processing', 'shipped', 'delivered', 'cancelled').required()
 });
 
-module.exports = { createOrder, updateOrderStatus };
+module.exports = { createOrder, updateOrderStatus, createUserOrder };
